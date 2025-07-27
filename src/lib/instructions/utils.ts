@@ -66,7 +66,7 @@ export function parseArgument(raw: string): { operand: Operand; value: number } 
   const trimmed = raw.trim();
 
   if (trimmed.startsWith("#")) {
-    const value = parseHexOrDecimal(trimmed.slice(1));
+    const value = parseNumber(trimmed.slice(1));
     if (value === null) return { error: `Invalid immediate value: ${trimmed}` };
     return { operand: "IMM", value };
   }
@@ -75,13 +75,13 @@ export function parseArgument(raw: string): { operand: Operand; value: number } 
     return { operand: trimmed.startsWith("IX") ? "IX" : "IY", value: 0 }; // Offset handling can be added later
   }
 
-  const value = parseHexOrDecimal(trimmed);
+  const value = parseNumber(trimmed);
   if (value !== null) return { operand: "MEM", value };
 
   return { error: `Unrecognized argument format: ${trimmed}` };
 }
 
-function parseNumber(value: string): number | null {
+export function parseNumber(value: string): number | null {
   if (/^0x[0-9a-fA-F]+$/.test(value)) return parseInt(value, 16);
   if (/^0b[01]+$/.test(value)) return parseInt(value.slice(2), 2);
   if (/^\d+$/.test(value)) return parseInt(value, 10);
@@ -93,8 +93,8 @@ export function parseHex(value: string): number | null {
   return null;
 }
 
-export function parseHexOrDecimal(value: string): number | null {
-  if (/^0x[0-9a-fA-F]+$/.test(value)) return parseInt(value, 16);
-  if (/^\d+$/.test(value)) return parseInt(value, 10);
-  return null;
-}
+// export function parseHexOrDecimal(value: string): number | null {
+//   if (/^0x[0-9a-fA-F]+$/.test(value)) return parseInt(value, 16);
+//   if (/^\d+$/.test(value)) return parseInt(value, 10);
+//   return null;
+// }

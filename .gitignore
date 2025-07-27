@@ -12,6 +12,7 @@
 
 # testing
 /coverage
+/src/lib/assembler/playground.ts
 
 # next.js
 /.next/
